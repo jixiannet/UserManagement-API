@@ -293,16 +293,24 @@ func post_requests(url string, data url.Values) {
 	postData := data.Encode()
 	// 设置请求的URL
 	reqURL := url + "api/api.php" // 替换为你的服务器地址
-	// 创建HTTP客户端
+
+	// 创建HTTP客户端（可以根据需要配置超时等）
 	client := &http.Client{}
+
 	// 创建请求
 	req, err := http.NewRequest("POST", reqURL, bytes.NewBufferString(postData))
 	if err != nil {
 		fmt.Println("Error creating request:", err)
 		return
 	}
+
 	// 设置请求头
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("User-Agent", "MyCustomClient/1.0")                                                                                                       // 自定义User-Agent
+	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9") // 示例Accept头部
+	req.Header.Set("Host", "example.com")                                                                                                                    // 替换为你的服务器域名或IP地址
+	// 注意：通常不需要设置Content-Encoding，除非服务器要求特殊的编码
+
 	// 发送请求并获取响应
 	resp, err := client.Do(req)
 	if err != nil {
@@ -310,12 +318,14 @@ func post_requests(url string, data url.Values) {
 		return
 	}
 	defer resp.Body.Close()
+
 	// 读取响应体
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Println("Error reading response body:", err)
 		return
 	}
+
 	// 打印响应内容
 	fmt.Println("Response:", string(body))
 }
