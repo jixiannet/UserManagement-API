@@ -5,7 +5,7 @@ import (
 	"bytes"
 	"fmt"
 	"gopkg.in/yaml.v3"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"net/url"
@@ -311,7 +311,7 @@ func post_requests(url string, data url.Values) {
 	}
 	defer resp.Body.Close()
 	// 读取响应体
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Println("Error reading response body:", err)
 		return
